@@ -5,8 +5,7 @@ import { Header } from '@/app/components/layout/Header';
 import { Footer } from '@/app/components/layout/Footer';
 
 export default function LocaleLayout({
-    children,
-    params,
+    children
 }: {
     children: React.ReactNode;
     params: { locale: string };

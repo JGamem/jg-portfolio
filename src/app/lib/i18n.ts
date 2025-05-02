@@ -1,3 +1,5 @@
+'use client';
+
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -326,6 +328,7 @@ const esTranslations = {
     },
 };
 
+// Initialize i18next
 i18n
     .use(LanguageDetector)
     .use(initReactI18next)
@@ -346,17 +349,20 @@ i18n
 
 export default i18n;
 
-// Custom hook for using translations
-export const useTranslation = () => {
-    const { t, i18n: i18nInstance } = useReactI18nTranslation();
+// Workaround for the TypeScript error by defining a simpler useTranslation hook
+import { useTranslation as useI18nTranslation } from 'react-i18next';
 
-    const changeLanguage = (language: string) => {
-        i18nInstance.changeLanguage(language);
-    };
+export function useTranslation() {
+    const { t, i18n: i18nInstance } = useI18nTranslation();
+
+    // Using a more specific type for options
+    function typedT<T>(key: string, options?: Record<string, unknown>): T {
+        return t(key, options || {}) as T;
+    }
 
     return {
-        t,
+        t: typedT,
         currentLanguage: i18nInstance.language,
-        changeLanguage,
+        changeLanguage: (language: string) => i18nInstance.changeLanguage(language)
     };
-};
+}

@@ -5,13 +5,18 @@ import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
 import { Code, Database, Server } from 'lucide-react';
 
+interface Stat {
+    label: string;
+    value: string;
+}
+
 export const About: React.FC = () => {
     const { t } = useTranslation();
 
-    const stats = [
-        { label: t('about.yearsOfExperience'), value: '4+' },
-        { label: t('about.completedProjects'), value: '20+' },
-        { label: t('about.technologies'), value: '15+' },
+    const stats: Stat[] = [
+        { label: t<string>('about.yearsOfExperience'), value: '4+' },
+        { label: t<string>('about.completedProjects'), value: '20+' },
+        { label: t<string>('about.technologies'), value: '15+' },
     ];
 
     return (
@@ -19,7 +24,7 @@ export const About: React.FC = () => {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                        {t('about.title')}
+                        {t<string>('about.title')}
                     </h2>
                     <div className="w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mt-4 mb-8"></div>
                 </div>
@@ -32,12 +37,12 @@ export const About: React.FC = () => {
                         viewport={{ once: true }}
                     >
                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                            {t('about.description')}
+                            {t<string>('about.description')}
                         </p>
 
                         {/* Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-                            {stats.map((stat, index) => (
+                            {stats.map((stat: Stat, index: number) => (
                                 <div
                                     key={index}
                                     className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md"

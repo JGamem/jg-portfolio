@@ -5,6 +5,12 @@ import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
+interface ContactInfo {
+    icon: React.ReactNode;
+    title: string;
+    details: string;
+}
+
 export const Contact: React.FC = () => {
     const { t } = useTranslation();
 
@@ -14,20 +20,20 @@ export const Contact: React.FC = () => {
         alert('Form submitted! In a real implementation, this would send your message.');
     };
 
-    const contactInfo = [
+    const contactInfo: ContactInfo[] = [
         {
             icon: <Phone className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-            title: t('contact.phone'),
+            title: t<string>('contact.phone'),
             details: '+(502) 44911338',
         },
         {
             icon: <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-            title: t('contact.email'),
+            title: t<string>('contact.email'),
             details: 'johngamezm@gmail.com',
         },
         {
             icon: <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-            title: t('contact.location'),
+            title: t<string>('contact.location'),
             details: 'Guatemala City, Guatemala',
         },
     ];
@@ -37,11 +43,11 @@ export const Contact: React.FC = () => {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                        {t('contact.title')}
+                        {t<string>('contact.title')}
                     </h2>
                     <div className="w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mt-4 mb-8"></div>
                     <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                        {t('contact.description')}
+                        {t<string>('contact.description')}
                     </p>
                 </div>
 
@@ -58,7 +64,7 @@ export const Contact: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 mb-2">
-                                        {t('contact.form.name')}
+                                        {t<string>('contact.form.name')}
                                     </label>
                                     <input
                                         type="text"
@@ -70,7 +76,7 @@ export const Contact: React.FC = () => {
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="block text-gray-700 dark:text-gray-300 mb-2">
-                                        {t('contact.form.email')}
+                                        {t<string>('contact.form.email')}
                                     </label>
                                     <input
                                         type="email"
@@ -84,7 +90,7 @@ export const Contact: React.FC = () => {
 
                             <div className="mb-6">
                                 <label htmlFor="message" className="block text-gray-700 dark:text-gray-300 mb-2">
-                                    {t('contact.form.message')}
+                                    {t<string>('contact.form.message')}
                                 </label>
                                 <textarea
                                     id="message"
@@ -99,14 +105,14 @@ export const Contact: React.FC = () => {
                                 type="submit"
                                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
                             >
-                                {t('contact.form.send')}
+                                {t<string>('contact.form.send')}
                             </button>
                         </motion.form>
                     </div>
 
                     <div>
                         <div className="space-y-6">
-                            {contactInfo.map((item, index) => (
+                            {contactInfo.map((item: ContactInfo, index: number) => (
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, x: 20 }}
