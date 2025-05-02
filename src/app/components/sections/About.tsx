@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
@@ -66,7 +68,7 @@ export const About: React.FC = () => {
                                 Frontend
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400">
-                                React, TypeScript, Next.js, HTML5, CSS3, UnoCSS, Framer Motion
+                                React, TypeScript, Next.js, HTML5, CSS3
                             </p>
                         </div>
 
@@ -78,7 +80,7 @@ export const About: React.FC = () => {
                                 Backend
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400">
-                                Node.js, Express, Python, C#, .NET, PHP, Laravel, Symfony
+                                Node.js, Express, Python, C#, .NET
                             </p>
                         </div>
 
@@ -105,7 +107,7 @@ export const About: React.FC = () => {
                                 AWS
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400">
-                                Lambda, S3, API Gateway, EC2, RDS, DynamoDB
+                                Lambda, S3, API Gateway, EC2, RDS
                             </p>
                         </div>
                     </motion.div>

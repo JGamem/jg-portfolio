@@ -27,7 +27,7 @@ const enTranslations = {
                 title: 'Fullstack Developer Mid',
                 company: 'Genpact',
                 period: 'August 2024 - Present',
-                description: 'As a Full-Stack Developer, I specialize in AWS, React, TypeScript, and Python, with experience in serverless architectures using AWS Lambda for artificial intelligence applications. I integrate LLMs through Amazon Bedrock to optimize data processing, offering innovative and high-impact solutions. I have worked in frontend (React, TypeScript) and backend (Python, Node.js, AWS), developing scalable web applications, creating RESTful APIs, and optimizing database performance. As a Mid-Level, I have designed and implemented end-to-end solutions, ensuring seamless integration between frontend and backend. I have solid experience in Postman, Azure DevOps, and GitHub, Linux, Windows, and macOS environments.',
+                description: 'As a Full-Stack Developer, I specialize in AWS, React, TypeScript, and Python, with experience in serverless architectures using AWS Lambda for artificial intelligence applications. I integrate LLMs through Amazon Bedrock to optimize data processing, offering innovative and high-impact solutions.',
             },
             {
                 title: 'Backend Developer Jr',
@@ -189,7 +189,7 @@ const esTranslations = {
                 title: 'Desarrollador Fullstack Mid',
                 company: 'Genpact',
                 period: 'Agosto 2024 - Actualmente',
-                description: 'Como Desarrollador Full-Stack, me especializo en AWS, React, TypeScript y Python, con experiencia en arquitecturas serverless utilizando AWS Lambda para aplicaciones de inteligencia artificial. Integro LLMs a través de Amazon Bedrock para optimizar el procesamiento de datos, ofreciendo soluciones innovadoras y de alto impacto. He trabajado en frontend (React, TypeScript) y backend (Python, Node.js, AWS), desarrollando aplicaciones web escalables, creando APIs RESTful y optimizando el rendimiento de bases de datos. Como Mid-Level, he diseñado e implementado soluciones de extremo a extremo, asegurando una integración fluida entre el frontend y el backend. Tengo una sólida experiencia en Postman, Azure DevOps y GitHub, entornos Linux, Windows y macOS.',
+                description: 'Como Desarrollador Full-Stack, me especializo en AWS, React, TypeScript y Python, con experiencia en arquitecturas serverless utilizando AWS Lambda para aplicaciones de inteligencia artificial. Integro LLMs a través de Amazon Bedrock para optimizar el procesamiento de datos, ofreciendo soluciones innovadoras y de alto impacto.',
             },
             {
                 title: 'Desarrollador Backend Jr',

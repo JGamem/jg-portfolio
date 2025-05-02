@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
@@ -7,7 +9,14 @@ export const Projects: React.FC = () => {
     const { t } = useTranslation();
     const [visibleProjects, setVisibleProjects] = useState(3);
 
-    const projects = t('projects.items', { returnObjects: true });
+    // TypeScript type
+    type Project = {
+        title: string;
+        description: string;
+        technologies: string[];
+    };
+
+    const projects = t<Project[]>('projects.items', { returnObjects: true });
 
     const showMoreProjects = () => {
         setVisibleProjects(projects.length);

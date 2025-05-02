@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
@@ -5,6 +7,14 @@ import { GraduationCap, Award } from 'lucide-react';
 
 export const Education: React.FC = () => {
     const { t } = useTranslation();
+
+    // TypeScript type
+    type Degree = {
+        title: string;
+        institution: string;
+        period: string;
+        status: string;
+    };
 
     return (
         <section id="education" className="py-20 bg-white dark:bg-gray-800">
@@ -27,7 +37,7 @@ export const Education: React.FC = () => {
                         </div>
 
                         <div className="space-y-8">
-                            {t('education.degrees', { returnObjects: true }).map((degree, index) => (
+                            {t<Degree[]>('education.degrees', { returnObjects: true }).map((degree, index) => (
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, y: 20 }}
@@ -76,7 +86,7 @@ export const Education: React.FC = () => {
                             className="p-6 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md"
                         >
                             <ul className="space-y-4">
-                                {t('education.certifications.list', { returnObjects: true }).map((cert, index) => (
+                                {t<string[]>('education.certifications.list', { returnObjects: true }).map((cert, index) => (
                                     <motion.li
                                         key={index}
                                         initial={{ opacity: 0, x: -10 }}

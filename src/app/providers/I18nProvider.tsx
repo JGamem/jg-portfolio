@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import i18n from '@/app/lib/i18n';
 
 export const I18nProvider = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
-    const router = useRouter();
 
     useEffect(() => {
         // Extract locale from pathname (/en/... or /es/...)

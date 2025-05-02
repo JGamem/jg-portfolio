@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { Globe } from 'lucide-react';
