@@ -5,16 +5,16 @@ import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 
+// Define TypeScript type para proyectos
+type Project = {
+    title: string;
+    description: string;
+    technologies: string[];
+};
+
 export const Projects: React.FC = () => {
     const { t } = useTranslation();
     const [visibleProjects, setVisibleProjects] = useState(3);
-
-    // TypeScript type
-    type Project = {
-        title: string;
-        description: string;
-        technologies: string[];
-    };
 
     const projects = t<Project[]>('projects.items', { returnObjects: true });
 

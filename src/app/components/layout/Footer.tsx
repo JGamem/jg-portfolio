@@ -74,4 +74,46 @@ export const Footer: React.FC = () => {
                                 <span className="text-gray-600 dark:text-gray-400">+(502) 44911338</span>
                             </li>
                             <li className="flex items-center space-x-2">
-                                <Mail className="w
+                                <Mail className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+
+                                href="mailto:johngamezm@gmail.com"
+                                className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                                johngamezm@gmail.com
+                            </a>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                            <Github className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+
+                            href="https://github.com/juanmartinez"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                            GitHub
+                        </a>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                        <Linkedin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+
+                        href="https://linkedin.com/in/juanmartinez"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                        LinkedIn
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div >
+
+    <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
+        <p className="text-gray-600 dark:text-gray-400">
+            &copy; {currentYear} Juan Martinez. {t('footer.rights')}
+        </p>
+    </div>
+      </div >
+    </footer >
+  );
+};

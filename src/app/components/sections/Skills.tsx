@@ -5,6 +5,12 @@ import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 
+// Define tipos para mejor tipado
+type Language = {
+    name: string;
+    level: string;
+};
+
 export const Skills: React.FC = () => {
     const { t } = useTranslation();
 
@@ -21,12 +27,6 @@ export const Skills: React.FC = () => {
     const item = {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0 }
-    };
-
-    // TypeScript types
-    type Language = {
-        name: string;
-        level: string;
     };
 
     return (
@@ -53,7 +53,7 @@ export const Skills: React.FC = () => {
                             viewport={{ once: true }}
                             className="space-y-4"
                         >
-                            {t<string[]>('skills.hard', { returnObjects: true }).map((skill, index) => (
+                            {(t<string[]>('skills.hard', { returnObjects: true })).map((skill, index) => (
                                 <motion.li
                                     key={index}
                                     variants={item}
@@ -75,7 +75,7 @@ export const Skills: React.FC = () => {
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {t<string[]>('skills.soft', { returnObjects: true }).map((skill, index) => (
+                                {(t<string[]>('skills.soft', { returnObjects: true })).map((skill, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, scale: 0.9 }}
@@ -98,7 +98,7 @@ export const Skills: React.FC = () => {
                             </h3>
 
                             <div className="space-y-4">
-                                {t<Language[]>('skills.languagesList', { returnObjects: true }).map((language, index) => (
+                                {(t<Language[]>('skills.languagesList', { returnObjects: true })).map((language, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, width: 0 }}
