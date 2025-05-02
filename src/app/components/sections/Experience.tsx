@@ -5,16 +5,19 @@ import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin } from 'lucide-react';
 
+// TypeScript type for roles
+interface Role {
+    title: string;
+    company: string;
+    period: string;
+    description: string;
+}
+
 export const Experience: React.FC = () => {
     const { t } = useTranslation();
 
-    // TypeScript type for roles
-    type Role = {
-        title: string;
-        company: string;
-        period: string;
-        description: string;
-    };
+    // Type-safe way to access roles from translations
+    const roles = t<Role[]>('experience.roles', { returnObjects: true });
 
     return (
         <section id="experience" className="py-20 bg-white dark:bg-gray-800">
@@ -28,7 +31,7 @@ export const Experience: React.FC = () => {
 
                 <div className="max-w-4xl mx-auto">
                     <div className="relative pl-8 border-l-2 border-blue-600 dark:border-blue-400 space-y-12">
-                        {t<Role[]>('experience.roles', { returnObjects: true }).map((role, index) => (
+                        {roles.map((role, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, x: -20 }}

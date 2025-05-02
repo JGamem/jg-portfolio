@@ -348,15 +348,15 @@ export default i18n;
 
 // Custom hook for using translations
 export const useTranslation = () => {
-    const { t, i18n } = require('react-i18next');
+    const { t, i18n: i18nInstance } = useReactI18nTranslation();
 
     const changeLanguage = (language: string) => {
-        i18n.changeLanguage(language);
+        i18nInstance.changeLanguage(language);
     };
 
     return {
         t,
-        currentLanguage: i18n.language,
+        currentLanguage: i18nInstance.language,
         changeLanguage,
     };
 };

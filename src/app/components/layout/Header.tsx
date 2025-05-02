@@ -23,20 +23,20 @@ export const Header: React.FC = () => {
     }, []);
 
     const navItems = [
-        { href: '#home', label: t('nav.home') },
-        { href: '#about', label: t('nav.about') },
-        { href: '#experience', label: t('nav.experience') },
-        { href: '#skills', label: t('nav.skills') },
-        { href: '#education', label: t('nav.education') },
-        { href: '#projects', label: t('nav.projects') },
-        { href: '#contact', label: t('nav.contact') },
+        { href: '#home', label: t<string>('nav.home') },
+        { href: '#about', label: t<string>('nav.about') },
+        { href: '#experience', label: t<string>('nav.experience') },
+        { href: '#skills', label: t<string>('nav.skills') },
+        { href: '#education', label: t<string>('nav.education') },
+        { href: '#projects', label: t<string>('nav.projects') },
+        { href: '#contact', label: t<string>('nav.contact') },
     ];
 
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                    ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md'
-                    : 'bg-transparent'
+                ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md'
+                : 'bg-transparent'
                 }`}
         >
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">

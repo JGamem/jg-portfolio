@@ -5,7 +5,7 @@ import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 
-// Define TypeScript type para proyectos
+// Define TypeScript type for projects
 type Project = {
     title: string;
     description: string;
@@ -16,6 +16,7 @@ export const Projects: React.FC = () => {
     const { t } = useTranslation();
     const [visibleProjects, setVisibleProjects] = useState(3);
 
+    // Use type annotation to explicitly tell TypeScript what type to expect
     const projects = t<Project[]>('projects.items', { returnObjects: true });
 
     const showMoreProjects = () => {
@@ -69,41 +70,40 @@ export const Projects: React.FC = () => {
                                 </div>
 
                                 <div className="flex justify-between">
+                                    <a
+                                        href="#"
+                                        className="text-blue-600 dark:text-blue-400 hover:underline flex items-center"
+                                        onClick={(e) => e.preventDefault()}
+                                    >
+                                        <Github className="w-4 h-4 mr-1" />
+                                        <span>Code</span>
+                                    </a>
 
-                                    href="#"
-                                    className="text-blue-600 dark:text-blue-400 hover:underline flex items-center"
-                                    onClick={(e) => e.preventDefault()}
-                  >
-                                    <Github className="w-4 h-4 mr-1" />
-                                    <span>Code</span>
-                                </a>
+                                    <a
+                                        href="#"
+                                        className="text-blue-600 dark:text-blue-400 hover:underline flex items-center"
+                                        onClick={(e) => e.preventDefault()}
+                                    >
+                                        <ExternalLink className="w-4 h-4 mr-1" />
+                                        <span>Demo</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
 
-                                href="#"
-                                className="text-blue-600 dark:text-blue-400 hover:underline flex items-center"
-                                onClick={(e) => e.preventDefault()}
-                  >
-                                <ExternalLink className="w-4 h-4 mr-1" />
-                                <span>Demo</span>
-                            </a>
-                        </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        
-        {
-        visibleProjects < projects.length && (
-            <div className="text-center mt-12">
-                <button
-                    onClick={showMoreProjects}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
-                >
-                    {t('projects.viewAll')}
-                </button>
+                {visibleProjects < projects.length && (
+                    <div className="text-center mt-12">
+                        <button
+                            onClick={showMoreProjects}
+                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+                        >
+                            {t('projects.viewAll')}
+                        </button>
+                    </div>
+                )}
             </div>
-        )
-    }
-      </div >
-    </section >
-  );
+        </section>
+    );
 };
