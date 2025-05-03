@@ -1,144 +1,112 @@
-// src/components/ui/CustomCursor.tsx
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { CursorVariant, cursorVariants } from '@/app/lib/animation';
 
 export const CustomCursor: React.FC = () => {
     const cursorRef = useRef<HTMLDivElement>(null);
-    const cursorDotRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [isPointer, setIsPointer] = useState(false);
-    const [isHidden, setIsHidden] = useState(false);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    // Smooth spring animation for cursor
+    const springConfig = { damping: 25, stiffness: 700 };
+    const cursorX = useSpring(mouseX, springConfig);
+    const cursorY = useSpring(mouseY, springConfig);
+
+    const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setPosition({ x: e.clientX, y: e.clientY });
-            setIsHidden(false);
+        // Make cursor visible after a short delay for a smooth entrance
+        const timer = setTimeout(() => setIsVisible(true), 300);
+
+        const updateMousePosition = (e: MouseEvent) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
         };
 
-        const handleMouseOver = (e: MouseEvent) => {
+        const updateCursorVariant = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
 
-            // Verificar si el elemento es clickeable
-            const isClickable: boolean =
-                target.tagName === 'A' ||
-                target.tagName === 'BUTTON' ||
-                target.closest('a') !== null ||
-                target.closest('button') !== null ||
-                window.getComputedStyle(target).cursor === 'pointer';
-
-            // Ahora isClickable es explícitamente un boolean
-            setIsPointer(isClickable);
+            // Determine cursor variant based on element
+            if (target.tagName === 'A' || target.closest('a') ||
+                (target.tagName === 'BUTTON' || target.closest('button'))) {
+                setCursorVariant('link');
+            } else if (
+                target.tagName === 'P' ||
+                target.tagName === 'H1' ||
+                target.tagName === 'H2' ||
+                target.tagName === 'H3' ||
+                target.tagName === 'H4' ||
+                target.tagName === 'SPAN' ||
+                target.tagName === 'LI'
+            ) {
+                setCursorVariant('text');
+            } else if (target.closest('[data-cursor="project"]')) {
+                setCursorVariant('project');
+            } else {
+                setCursorVariant('default');
+            }
         };
 
         const handleMouseLeave = () => {
-            setIsHidden(true);
+            setIsVisible(false);
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseover', handleMouseOver);
+        const handleMouseEnter = () => {
+            setIsVisible(true);
+        };
+
+        window.addEventListener('mousemove', updateMousePosition);
+        window.addEventListener('mousemove', updateCursorVariant);
         document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+        document.documentElement.addEventListener('mouseenter', handleMouseEnter);
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseover', handleMouseOver);
+            clearTimeout(timer);
+            window.removeEventListener('mousemove', updateMousePosition);
+            window.removeEventListener('mousemove', updateCursorVariant);
             document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+            document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
         };
-    }, []);
-
-    useEffect(() => {
-        if (!cursorRef.current || !cursorDotRef.current) return;
-
-        // Add a slight lag to the outer circle
-        cursorRef.current.style.transform = `translate(${position.x}px, ${position.y}px)`;
-
-        // Dot follows cursor exactly
-        cursorDotRef.current.style.transform = `translate(${position.x}px, ${position.y}px)`;
-
-        if (isPointer) {
-            cursorRef.current.classList.add('cursor-expanded');
-            cursorDotRef.current.classList.add('cursor-dot-expanded');
-        } else {
-            cursorRef.current.classList.remove('cursor-expanded');
-            cursorDotRef.current.classList.remove('cursor-dot-expanded');
-        }
-
-        if (isHidden) {
-            cursorRef.current.classList.add('cursor-hidden');
-            cursorDotRef.current.classList.add('cursor-hidden');
-        } else {
-            cursorRef.current.classList.remove('cursor-hidden');
-            cursorDotRef.current.classList.remove('cursor-hidden');
-        }
-    }, [position, isPointer, isHidden]);
+    }, [mouseX, mouseY]);
 
     return (
         <>
             <style jsx global>{`
-        body {
+        /* Hide default cursor on everything when custom cursor is active */
+        html, body, * {
         cursor: none !important;
         }
         
-        a, button, [role="button"] {
-        cursor: none !important;
-        }
-        
-        .cursor {
-        pointer-events: none;
-        position: fixed;
-        top: -16px;
-        left: -16px;
-        width: 40px;
-        height: 40px;
-        border: 1px solid rgba(59, 130, 246, 0.6);
-        border-radius: 50%;
-        z-index: 9999;
-        transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
-        opacity: 0.8;
-        transform: translate(10px, 10px);
-        }
-        
-        .cursor-dot {
-        pointer-events: none;
-        position: fixed;
-        top: -3px;
-        left: -3px;
-        width: 6px;
-        height: 6px;
-        background-color: rgba(59, 130, 246, 0.8);
-        border-radius: 50%;
-        z-index: 10000;
-        transform: translate(10px, 10px);
-        }
-        
-        .cursor-expanded {
-        width: 50px;
-        height: 50px;
-        top: -25px;
-        left: -25px;
-        opacity: 0.3;
-        border-color: rgba(99, 102, 241, 0.6);
-        border-width: 2px;
-        }
-        
-        .cursor-dot-expanded {
-        transform: scale(0.5);
-        opacity: 0.6;
-        }
-        
-        .cursor-hidden {
-        opacity: 0;
-        }
-        
-        /* For mobile devices */
+        /* Show default cursor for touch devices */
         @media (pointer: coarse) {
-        .cursor, .cursor-dot {
-            display: none;
+          html, body, * {
+            cursor: auto !important;
         }
         }
     `}</style>
-            <div ref={cursorRef} className="cursor" />
-            <div ref={cursorDotRef} className="cursor-dot" />
+
+            <motion.div
+                ref={cursorRef}
+                className="pointer-events-none fixed top-0 left-0 z-[999] rounded-full mix-blend-difference"
+                variants={cursorVariants}
+                animate={cursorVariant}
+                initial="default"
+                style={{
+                    x: cursorX,
+                    y: cursorY,
+                    opacity: isVisible ? 1 : 0,
+                }}
+            >
+                <motion.div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-blue-500 rounded-full"
+                    animate={{
+                        scale: cursorVariant === 'default' ? 1 : 0.5
+                    }}
+                />
+            </motion.div>
         </>
     );
 };

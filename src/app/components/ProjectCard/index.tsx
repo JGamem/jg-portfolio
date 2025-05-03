@@ -1,121 +1,146 @@
-// src/components/ProjectCard/index.tsx
+// src/app/components/ProjectCard3D/index.tsx
+'use client';
+
 import React, { createContext, useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { fadeInUpOnScroll } from '@/app/lib/animation';
+import { Card3D } from '@/app/components/ui/Card';
+
 // Context for ProjectCard
-interface ProjectCardContextProps {
+interface ProjectCard3DContextProps {
     isHovered: boolean;
 }
 
-const ProjectCardContext = createContext<ProjectCardContextProps | undefined>(undefined);
+const ProjectCard3DContext = createContext<ProjectCard3DContextProps | undefined>(undefined);
 
 // Hook to use the ProjectCard context
-const useProjectCard = () => {
-    const context = useContext(ProjectCardContext);
+const useProjectCard3D = () => {
+    const context = useContext(ProjectCard3DContext);
     if (!context) {
-        throw new Error('ProjectCard compound components must be used within a ProjectCard');
+        throw new Error('ProjectCard3D compound components must be used within a ProjectCard3D');
     }
     return context;
 };
 
 // Component Props Types
-interface ProjectCardProps {
+interface ProjectCard3DProps {
     children: React.ReactNode;
     className?: string;
 }
 
-interface ProjectCardImageProps {
+interface ProjectCard3DImageProps {
     src: string;
     alt: string;
     className?: string;
 }
 
-interface ProjectCardContentProps {
+interface ProjectCard3DContentProps {
     children: React.ReactNode;
     className?: string;
 }
 
-interface ProjectCardTitleProps {
+interface ProjectCard3DTitleProps {
     children: React.ReactNode;
     className?: string;
 }
 
-interface ProjectCardDescriptionProps {
+interface ProjectCard3DDescriptionProps {
     children: React.ReactNode;
     className?: string;
 }
 
-interface ProjectCardTagsProps {
+interface ProjectCard3DTagsProps {
     children: React.ReactNode;
     className?: string;
 }
 
-interface ProjectCardTagProps {
+interface ProjectCard3DTagProps {
     children: React.ReactNode;
     className?: string;
 }
 
-interface ProjectCardLinksProps {
+interface ProjectCard3DLinksProps {
     children: React.ReactNode;
     className?: string;
 }
 
-type ProjectCardLinkProps = {
+interface ProjectCard3DLinkProps {
     href: string;
     children: React.ReactNode;
     className?: string;
     icon?: React.ReactNode;
-};
+}
 
-// Main ProjectCard Component
-export const ProjectCard = ({ children, className = '' }: ProjectCardProps) => {
+// Main ProjectCard3D Component
+export const ProjectCard3D = ({ children, className = '' }: ProjectCard3DProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <ProjectCardContext.Provider value={{ isHovered }}>
+        <ProjectCard3DContext.Provider value={{ isHovered }}>
             <motion.div
-                className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${isHovered ? 'transform translate-y-[-8px]' : ''
-                    } ${className}`}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
+                data-cursor="project"
+                variants={fadeInUpOnScroll}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
             >
-                {children}
+                <Card3D
+                    className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden ${className}`}
+                    glareEnabled={true}
+                    depth={0.75}
+                >
+                    <div
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        {children}
+                    </div>
+                </Card3D>
             </motion.div>
-        </ProjectCardContext.Provider>
+        </ProjectCard3DContext.Provider>
     );
 };
 
-// ProjectCardImage Component
-export const ProjectCardImage = ({ src, alt, className = '' }: ProjectCardImageProps) => {
-    const { isHovered } = useProjectCard();
+// ProjectCard3DImage Component
+export const ProjectCard3DImage = ({ src, alt, className = '' }: ProjectCard3DImageProps) => {
+    const { isHovered } = useProjectCard3D();
 
     return (
         <div className="relative h-48 overflow-hidden">
-            <Image
-                src={src}
-                alt={alt}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className={`object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'
-                    } ${className}`}
+            <motion.div
+                animate={{
+                    scale: isHovered ? 1.1 : 1,
+                }}
+                transition={{
+                    duration: 0.7,
+                    ease: [0.22, 1, 0.36, 1],
+                }}
+                className="h-full w-full"
+            >
+                <Image
+                    src={src}
+                    alt={alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className={`object-cover ${className}`}
+                />
+            </motion.div>
+            <div
+                className={`absolute inset-0 bg-gradient-to-t from-black/60 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-70' : 'opacity-50'
+                    }`}
             />
-            <div className={`absolute inset-0 bg-gradient-to-t from-black/60 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-70' : 'opacity-50'
-                }`} />
         </div>
     );
 };
 
-// ProjectCardContent Component
-export const ProjectCardContent = ({ children, className = '' }: ProjectCardContentProps) => {
+// ProjectCard3DContent Component
+export const ProjectCard3DContent = ({ children, className = '' }: ProjectCard3DContentProps) => {
     return <div className={`p-6 ${className}`}>{children}</div>;
 };
 
-// ProjectCardTitle Component
-export const ProjectCardTitle = ({ children, className = '' }: ProjectCardTitleProps) => {
+// ProjectCard3DTitle Component
+export const ProjectCard3DTitle = ({ children, className = '' }: ProjectCard3DTitleProps) => {
     return (
         <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-2 ${className}`}>
             {children}
@@ -123,8 +148,8 @@ export const ProjectCardTitle = ({ children, className = '' }: ProjectCardTitleP
     );
 };
 
-// ProjectCardDescription Component
-export const ProjectCardDescription = ({ children, className = '' }: ProjectCardDescriptionProps) => {
+// ProjectCard3DDescription Component
+export const ProjectCard3DDescription = ({ children, className = '' }: ProjectCard3DDescriptionProps) => {
     return (
         <p className={`text-gray-600 dark:text-gray-400 mb-4 ${className}`}>
             {children}
@@ -132,8 +157,8 @@ export const ProjectCardDescription = ({ children, className = '' }: ProjectCard
     );
 };
 
-// ProjectCardTags Component
-export const ProjectCardTags = ({ children, className = '' }: ProjectCardTagsProps) => {
+// ProjectCard3DTags Component
+export const ProjectCard3DTags = ({ children, className = '' }: ProjectCard3DTagsProps) => {
     return (
         <div className={`flex flex-wrap gap-2 mb-4 ${className}`}>
             {children}
@@ -141,17 +166,29 @@ export const ProjectCardTags = ({ children, className = '' }: ProjectCardTagsPro
     );
 };
 
-// ProjectCardTag Component
-export const ProjectCardTag = ({ children, className = '' }: ProjectCardTagProps) => {
+// ProjectCard3DTag Component
+export const ProjectCard3DTag = ({ children, className = '' }: ProjectCard3DTagProps) => {
+    const { isHovered } = useProjectCard3D();
+
     return (
-        <span className={`px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ${className}`}>
+        <motion.span
+            className={`px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ${className}`}
+            animate={{
+                scale: isHovered ? 1.05 : 1,
+                y: isHovered ? -2 : 0,
+            }}
+            transition={{
+                duration: 0.3,
+                ease: "easeOut",
+            }}
+        >
             {children}
-        </span>
+        </motion.span>
     );
 };
 
-// ProjectCardLinks Component
-export const ProjectCardLinks = ({ children, className = '' }: ProjectCardLinksProps) => {
+// ProjectCard3DLinks Component
+export const ProjectCard3DLinks = ({ children, className = '' }: ProjectCard3DLinksProps) => {
     return (
         <div className={`flex justify-between mt-4 ${className}`}>
             {children}
@@ -159,36 +196,44 @@ export const ProjectCardLinks = ({ children, className = '' }: ProjectCardLinksP
     );
 };
 
-// ProjectCardLink Component - Fixed simplified version
-export function ProjectCardLink(props: ProjectCardLinkProps) {
-    const href = props.href;
-    const children = props.children;
-    const className = props.className || '';
-    const icon = props.icon;
+// ProjectCard3DLink Component - Fixed with proper TypeScript typing
+export const ProjectCard3DLink: React.FC<ProjectCard3DLinkProps> = ({
+    href,
+    children,
+    className = '',
+    icon
+}) => {
+    const { isHovered } = useProjectCard3D();
 
-    // Una vez que la versión básica funciona, podemos añadir más funcionalidades
     return (
-        <a
+        <motion.a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
             className={`text-blue-600 dark:text-blue-400 hover:underline flex items-center ${className}`}
+            animate={{
+                x: isHovered ? 3 : 0,
+            }}
+            transition={{
+                duration: 0.3,
+                ease: "easeOut",
+            }}
         >
             {icon && <span className="mr-1">{icon}</span>}
             <span>{children}</span>
-        </a>
+        </motion.a>
     );
-}
+};
 
 // Assign sub-components to main component
-ProjectCard.Image = ProjectCardImage;
-ProjectCard.Content = ProjectCardContent;
-ProjectCard.Title = ProjectCardTitle;
-ProjectCard.Description = ProjectCardDescription;
-ProjectCard.Tags = ProjectCardTags;
-ProjectCard.Tag = ProjectCardTag;
-ProjectCard.Links = ProjectCardLinks;
-ProjectCard.Link = ProjectCardLink;
+ProjectCard3D.Image = ProjectCard3DImage;
+ProjectCard3D.Content = ProjectCard3DContent;
+ProjectCard3D.Title = ProjectCard3DTitle;
+ProjectCard3D.Description = ProjectCard3DDescription;
+ProjectCard3D.Tags = ProjectCard3DTags;
+ProjectCard3D.Tag = ProjectCard3DTag;
+ProjectCard3D.Links = ProjectCard3DLinks;
+ProjectCard3D.Link = ProjectCard3DLink;
 
 // Export as default
-export default ProjectCard;
+export default ProjectCard3D;

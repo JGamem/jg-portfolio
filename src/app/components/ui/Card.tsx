@@ -1,49 +1,122 @@
-// src/components/ui/Card.tsx
-import React from 'react';
+// src/app/components/ui/Card3D.tsx
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useMotionValue} from 'framer-motion';
+import { MousePosition, card3DEffect } from '@/app/lib/animation';
 
 interface CardProps {
-    className?: string;
     children: React.ReactNode;
+    className?: string;
+    depth?: number;
+    glareEnabled?: boolean;
+    animationEnabled?: boolean;
 }
 
-interface CardComponentProps {
-    className?: string;
-    children: React.ReactNode;
-}
+export const Card3D: React.FC<CardProps> = ({
+    children,
+    className = '',
+    glareEnabled = true,
+    animationEnabled = true,
+}) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0.5, y: 0.5 });
+    const [hovered, setHovered] = useState(false);
 
-// Componente principal Card
-export const Card: React.FC<CardProps> & {
-    Header: React.FC<CardComponentProps>;
-    Body: React.FC<CardComponentProps>;
-    Footer: React.FC<CardComponentProps>;
-} = ({ className = '', children }) => {
+    // Motion values for mouse position
+    const mouseX = useMotionValue(0.5);
+    const mouseY = useMotionValue(0.5);
+
+    // Motion values for glare effect
+    const glareOpacity = useMotionValue(0);
+    const glareX = useMotionValue(50);
+    const glareY = useMotionValue(50);
+
+    // Update mouseX and mouseY when mousePosition changes
+    useEffect(() => {
+        mouseX.set(mousePosition.x);
+        mouseY.set(mousePosition.y);
+    }, [mousePosition, mouseX, mouseY]);
+
+    // Link glare position to mouse position
+    useEffect(() => {
+        const unsubscribeX = mouseX.onChange(value => {
+            glareX.set(value * 100);
+        });
+
+        const unsubscribeY = mouseY.onChange(value => {
+            glareY.set(value * 100);
+        });
+
+        return () => {
+            unsubscribeX();
+            unsubscribeY();
+        };
+    }, [mouseX, mouseY, glareX, glareY]);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current || !animationEnabled) return;
+
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+
+        setMousePosition({ x, y });
+
+        if (glareEnabled) {
+            glareOpacity.set(0.15);
+        }
+    };
+
+    const handleMouseEnter = () => {
+        if (!animationEnabled) return;
+        setHovered(true);
+
+        if (glareEnabled) {
+            glareOpacity.set(0.15);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (!animationEnabled) return;
+        setHovered(false);
+        setMousePosition({ x: 0.5, y: 0.5 });
+
+        if (glareEnabled) {
+            glareOpacity.set(0);
+        }
+    };
+
     return (
-        <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden ${className}`}>
-            {children}
-        </div>
+        <motion.div
+            ref={cardRef}
+            className={`relative ${className}`}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            initial="rest"
+            animate={hovered && animationEnabled ? "hover" : "rest"}
+            variants={card3DEffect}
+            custom={mousePosition}
+            style={{
+                transformStyle: 'preserve-3d',
+                transformPerspective: 1000,
+            }}
+        >
+            <div className="relative z-10">
+                {children}
+            </div>
+
+            {glareEnabled && (
+                <motion.div
+                    className="absolute inset-0 pointer-events-none rounded-inherit overflow-hidden"
+                    style={{
+                        opacity: glareOpacity,
+                        background: `radial-gradient(circle at ${glareX.get()}% ${glareY.get()}%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 80%)`,
+                        mixBlendMode: 'overlay',
+                    }}
+                />
+            )}
+        </motion.div>
     );
 };
-
-// Definir los sub-componentes
-const Header: React.FC<CardComponentProps> = ({ className = '', children }) => (
-    <div className={`p-6 border-b border-gray-200 dark:border-gray-700 ${className}`}>
-        {children}
-    </div>
-);
-
-const Body: React.FC<CardComponentProps> = ({ className = '', children }) => (
-    <div className={`p-6 ${className}`}>
-        {children}
-    </div>
-);
-
-const Footer: React.FC<CardComponentProps> = ({ className = '', children }) => (
-    <div className={`p-6 border-t border-gray-200 dark:border-gray-700 ${className}`}>
-        {children}
-    </div>
-);
-
-// Asignar los sub-componentes a la propiedad del componente principal
-Card.Header = Header;
-Card.Body = Body;
-Card.Footer = Footer;

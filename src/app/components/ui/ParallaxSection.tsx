@@ -1,55 +1,99 @@
-// src/components/ui/ParallaxSection.tsx
+// src/app/components/ui/EnhancedParallaxSection.tsx
 'use client';
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, ReactNode } from 'react';
+import { motion, MotionValue, useScroll, useTransform} from 'framer-motion';
 
-interface ParallaxSectionProps {
-    children: React.ReactNode;
-    speed?: number;
+interface EnhancedParallaxSectionProps {
+    children: ReactNode;
+    depth?: number;
     direction?: 'up' | 'down' | 'left' | 'right';
     className?: string;
+    easing?: [number, number, number, number];
+    targetScale?: number;
+    targetOpacity?: number;
+    offset?: [string, string];
 }
 
-export const ParallaxSection: React.FC<ParallaxSectionProps> = ({
+export const EnhancedParallaxSection: React.FC<EnhancedParallaxSectionProps> = ({
     children,
-    speed = 0.5,
+    depth = 0.5,
     direction = 'up',
     className = '',
+    easing = [0.22, 1, 0.36, 1],
+    targetScale = 1,
+    targetOpacity = 1
 }) => {
     const ref = useRef<HTMLDivElement>(null);
+
+    // En lugar de tratar de arreglar el tipo, simplemente declaramos el `useScroll` sin pasar el offset
     const { scrollYProgress } = useScroll({
         target: ref,
-        offset: ['start end', 'end start'],
     });
 
-    // Creamos todas las transformaciones posibles, pero solo usamos la que necesitamos
-    const yUp = useTransform(scrollYProgress, [0, 1], ['0%', `-${100 * speed}%`]);
-    const yDown = useTransform(scrollYProgress, [0, 1], ['0%', `${100 * speed}%`]);
-    const xLeft = useTransform(scrollYProgress, [0, 1], ['0%', `-${100 * speed}%`]);
-    const xRight = useTransform(scrollYProgress, [0, 1], ['0%', `${100 * speed}%`]);
+    // Create transform values for different properties
+    const y = useTransform(
+        scrollYProgress,
+        [0, 1],
+        direction === 'up' ? ['0%', `-${100 * depth}%`] :
+            direction === 'down' ? ['0%', `${100 * depth}%`] :
+                ['0%', '0%']
+    );
 
-    // Función para determinar qué transformación usar
-    const getTransformStyle = () => {
-        switch (direction) {
-            case 'up':
-                return { y: yUp };
-            case 'down':
-                return { y: yDown };
-            case 'left':
-                return { x: xLeft };
-            case 'right':
-                return { x: xRight };
-            default:
-                return { y: yUp };
+    const x = useTransform(
+        scrollYProgress,
+        [0, 1],
+        direction === 'left' ? ['0%', `-${100 * depth}%`] :
+            direction === 'right' ? ['0%', `${100 * depth}%`] :
+                ['0%', '0%']
+    );
+
+    const scale = useTransform(
+        scrollYProgress,
+        [0, 1],
+        [1, targetScale]
+    );
+
+    const opacity = useTransform(
+        scrollYProgress,
+        [0, 0.5, 1],
+        [0.3, targetOpacity, targetOpacity]
+    );
+
+    // Get appropriate transform style based on direction
+    const getMotionStyle = () => {
+        // Usamos un tipo más genérico para evitar problemas
+        const style: { [key: string]: MotionValue<number> | MotionValue<string> } = { 
+            opacity: opacity 
+        };
+
+        if (direction === 'up' || direction === 'down') {
+            style.y = y;
+        } else {
+            style.x = x;
         }
+
+        if (targetScale !== 1) {
+            style.scale = scale;
+        }
+
+        return style;
     };
 
     return (
         <div ref={ref} className={`relative overflow-hidden ${className}`}>
-            <motion.div style={getTransformStyle()} className="w-full h-full">
+            <motion.div
+                style={getMotionStyle()}
+                className="w-full h-full"
+                transition={{
+                    duration: 0.6,
+                    ease: easing
+                }}
+            >
                 {children}
             </motion.div>
         </div>
     );
 };
+
+export default EnhancedParallaxSection;

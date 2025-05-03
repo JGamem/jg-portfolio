@@ -3,8 +3,9 @@ import { About } from '@/app/components/sections/About';
 import { Experience } from '@/app/components/sections/Experience';
 import { Skills } from '@/app/components/sections/Skills';
 import { Education } from '@/app/components/sections/Education';
-import { Projects } from '@/app/components/sections/Projects';
+import Projects from '@/app/components/sections/Projects';
 import { Contact } from '@/app/components/sections/Contact';
+import { AccessibilityStatement } from '@/app/components/sections/AccessibilityStatement';
 
 export default function HomePage() {
     return (
@@ -16,6 +17,7 @@ export default function HomePage() {
             <Education />
             <Projects />
             <Contact />
+            <AccessibilityStatement />
         </>
     );
 }
