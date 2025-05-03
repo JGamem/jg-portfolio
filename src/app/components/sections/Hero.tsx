@@ -4,9 +4,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { motion, useAnimation } from 'framer-motion';
-import { EnhancedThreeBackground } from '@/app/components/ui/ThreeJsBackground';
+import { ThreeJsBackground } from '@/app/components/ui/ThreeJsBackground';
 import { GradientButton } from '@/app/components/ui/GradientButton';
 import { ArrowDown, ExternalLink } from 'lucide-react';
+
 
 export const Hero: React.FC = () => {
     const { t } = useTranslation();
@@ -16,6 +17,7 @@ export const Hero: React.FC = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const roles = [
         'Frontend Developer',
         'UX/UI Designer',
@@ -74,8 +76,7 @@ export const Hero: React.FC = () => {
 
     return (
         <section id="home" className="relative h-screen flex items-center">
-            {/* Enhanced Background */}
-            <EnhancedThreeBackground
+            <ThreeJsBackground
                 density={70}
                 noiseIntensity={0.6}
                 colorPalette={['#3b82f6', '#60a5fa', '#93c5fd', '#2563eb', '#1d4ed8']}
@@ -199,6 +200,6 @@ export const Hero: React.FC = () => {
                     <ArrowDown className="w-5 h-5 text-blue-500 dark:text-blue-400" />
                 </motion.div>
             </motion.div>
-        </section>
+        </section >
     );
 };

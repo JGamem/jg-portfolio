@@ -1,11 +1,11 @@
-// src/components/layout/ThemeToggle.tsx (enhance the existing file)
+// src/app/components/ui/ThemeToggle.tsx
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Moon, Sun, Contrast } from 'lucide-react';
 import { useThemeStore } from '@/app/store/theme';
 import { useTranslation } from '@/app/lib/i18n';
-import { motion } from 'framer-motion';
 
 export const ThemeToggle: React.FC = () => {
     const { theme, setTheme } = useThemeStore();
@@ -23,10 +23,10 @@ export const ThemeToggle: React.FC = () => {
         return <Contrast className="w-5 h-5" />;
     };
 
-    const getTitle = () => {
-        if (theme === 'light') return t<string>('theme.dark');
-        if (theme === 'dark') return t<string>('theme.highContrast');
-        return t<string>('theme.light');
+    const getTitle = (): string => {
+        if (theme === 'light') return t('theme.dark') || 'Switch to Dark Mode';
+        if (theme === 'dark') return t('theme.highContrast') || 'Switch to High Contrast';
+        return t('theme.light') || 'Switch to Light Mode';
     };
 
     return (
@@ -34,11 +34,18 @@ export const ThemeToggle: React.FC = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setTheme(getNextTheme())}
-            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-colors duration-200 high-contrast:bg-black high-contrast:text-white"
+            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 
+        high-contrast:bg-black high-contrast:text-white transition-colors duration-200"
             aria-label={getTitle()}
             title={getTitle()}
         >
-            {getIcon()}
+            <motion.div
+                initial={{ rotate: 0 }}
+                animate={{ rotate: theme === 'dark' ? 360 : 0 }}
+                transition={{ duration: 0.5, type: 'spring' }}
+            >
+                {getIcon()}
+            </motion.div>
         </motion.button>
     );
 };

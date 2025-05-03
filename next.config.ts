@@ -1,7 +1,7 @@
-// next.config.js
-import bundleAnalyzer from '@next/bundle-analyzer';
-
-const withBundleAnalyzer = bundleAnalyzer({
+// next.config.mjs (renamed from next.config.ts)
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
 
@@ -16,7 +16,6 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', 'three'],
-    serverComponents: true,
   }
 };
 

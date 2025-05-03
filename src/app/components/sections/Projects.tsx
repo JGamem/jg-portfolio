@@ -1,241 +1,167 @@
-// src/app/components/sections/EnhancedProjects.tsx
+// src/app/components/sections/Projects.tsx
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { useTranslation } from '@/app/lib/i18n';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, Code, PenTool, Server, Database } from 'lucide-react';
-import { ProjectFilter } from './ProjectFilter';
-import ProjectCard from '@/app/components/ProjectCard';
-import { staggerContainer, staggerItem } from '@/app/lib/animation';
+import { PortfolioFilter } from '@/app/components/ui/PortfolioFilter';
+import { PortfolioCard } from '@/app/components/ui/PortfolioCard';
+import { useTranslation } from '@/app/lib/i18n';
 
-// Define TypeScript type for projects with categories
-type Project = {
+interface Project {
+    id: string;
     title: string;
     description: string;
+    imageUrl: string;
     technologies: string[];
     category: string;
-    imageSrc?: string;
-    githubLink?: string;
-    demoLink?: string;
-    featured?: boolean;
-};
+    githubUrl?: string;
+    liveUrl?: string;
+}
+
+const projects: Project[] = [
+    {
+        id: '1',
+        title: 'AI-Powered Data Processing',
+        description: 'Serverless application using AWS Lambda and Amazon Bedrock to process and analyze large datasets with LLM integration.',
+        imageUrl: 'https://via.placeholder.com/800x600/3b82f6/FFFFFF?text=AI+Data+Processing',
+        technologies: ['AWS', 'Python', 'React', 'TypeScript'],
+        category: 'AI',
+        githubUrl: 'https://github.com',
+        liveUrl: 'https://example.com',
+    },
+    {
+        id: '2',
+        title: 'Enterprise Web Application',
+        description: 'Scalable web application with complex business logic and multiple integrations with third-party services.',
+        imageUrl: 'https://via.placeholder.com/800x600/4f46e5/FFFFFF?text=Enterprise+Web+App',
+        technologies: ['Node.js', 'React', 'MongoDB', 'AWS'],
+        category: 'Web',
+        githubUrl: 'https://github.com',
+    },
+    {
+        id: '3',
+        title: 'RESTful API Development',
+        description: 'High-performance RESTful API for data management with comprehensive documentation and security features.',
+        imageUrl: 'https://via.placeholder.com/800x600/0891b2/FFFFFF?text=RESTful+API',
+        technologies: ['Node.js', 'Express', 'SQL', 'Docker'],
+        category: 'Backend',
+        liveUrl: 'https://example.com',
+    },
+    {
+        id: '4',
+        title: 'Data Visualization Dashboard',
+        description: 'Interactive dashboard for visualizing complex datasets with real-time updates and filtering capabilities.',
+        imageUrl: 'https://via.placeholder.com/800x600/8b5cf6/FFFFFF?text=Data+Dashboard',
+        technologies: ['React', 'D3.js', 'TypeScript', 'Tailwind CSS'],
+        category: 'Data',
+        githubUrl: 'https://github.com',
+        liveUrl: 'https://example.com',
+    },
+    {
+        id: '5',
+        title: 'E-commerce Platform',
+        description: 'Full-featured e-commerce platform with product management, cart functionality, and payment processing.',
+        imageUrl: 'https://via.placeholder.com/800x600/ec4899/FFFFFF?text=E-commerce',
+        technologies: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind CSS'],
+        category: 'Web',
+        githubUrl: 'https://github.com',
+    },
+    {
+        id: '6',
+        title: 'Mobile Fitness Application',
+        description: 'Cross-platform mobile app for tracking workouts, nutrition, and health metrics with social features.',
+        imageUrl: 'https://via.placeholder.com/800x600/f59e0b/FFFFFF?text=Fitness+App',
+        technologies: ['React Native', 'Firebase', 'Redux', 'GraphQL'],
+        category: 'Mobile',
+    },
+];
 
 export const Projects: React.FC = () => {
     const { t } = useTranslation();
-    const [visibleProjects, setVisibleProjects] = useState(3);
-    const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
     const [activeCategory, setActiveCategory] = useState('All');
+    const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+    const [visibleProjects, setVisibleProjects] = useState(3);
     const [isClient, setIsClient] = useState(false);
 
-    // Client-side rendering safety
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    // Extract unique categories from projects
+    const categories = ['All', ...Array.from(new Set(projects.map(project => project.category)))];
 
-    // Use useMemo to prevent the projects array from being recreated on every render
-    const projects = useMemo(() => [
-        {
-            title: 'AI-Powered Data Processing',
-            description: 'Serverless application using AWS Lambda and Amazon Bedrock to process and analyze large datasets with LLM integration.',
-            technologies: ['AWS', 'Python', 'React', 'TypeScript'],
-            category: 'AI',
-            imageSrc: 'https://via.placeholder.com/800x600/3b82f6/FFFFFF?text=AI+Data+Processing',
-            githubLink: 'https://github.com',
-            demoLink: 'https://example.com',
-            featured: true,
-        },
-        {
-            title: 'Enterprise Web Application',
-            description: 'Scalable web application with complex business logic and multiple integrations with third-party services.',
-            technologies: ['Node.js', 'React', 'MongoDB', 'AWS'],
-            category: 'Web',
-            imageSrc: 'https://via.placeholder.com/800x600/4f46e5/FFFFFF?text=Enterprise+Web+App',
-            githubLink: 'https://github.com',
-            featured: true,
-        },
-        {
-            title: 'RESTful API Development',
-            description: 'High-performance RESTful API for data management with comprehensive documentation and security features.',
-            technologies: ['Node.js', 'Express', 'SQL', 'Docker'],
-            category: 'Backend',
-            imageSrc: 'https://via.placeholder.com/800x600/0891b2/FFFFFF?text=RESTful+API',
-            demoLink: 'https://example.com',
-        },
-        {
-            title: 'Data Visualization Dashboard',
-            description: 'Interactive dashboard for visualizing complex datasets with real-time updates and filtering capabilities.',
-            technologies: ['React', 'D3.js', 'TypeScript', 'Tailwind CSS'],
-            category: 'Data',
-            imageSrc: 'https://via.placeholder.com/800x600/8b5cf6/FFFFFF?text=Data+Dashboard',
-            githubLink: 'https://github.com',
-            demoLink: 'https://example.com',
-        },
-        {
-            title: 'E-commerce Platform',
-            description: 'Full-featured e-commerce platform with product management, cart functionality, and payment processing.',
-            technologies: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind CSS'],
-            category: 'Web',
-            imageSrc: 'https://via.placeholder.com/800x600/ec4899/FFFFFF?text=E-commerce',
-            githubLink: 'https://github.com',
-        },
-        {
-            title: 'Mobile Fitness Application',
-            description: 'Cross-platform mobile app for tracking workouts, nutrition, and health metrics with social features.',
-            technologies: ['React Native', 'Firebase', 'Redux', 'GraphQL'],
-            category: 'Mobile',
-            imageSrc: 'https://via.placeholder.com/800x600/f59e0b/FFFFFF?text=Fitness+App',
-        },
-    ], []);
-
-    // Extract all unique categories - also memoized to prevent recalculation
-    const categories = useMemo(() =>
-        ['All', ...Array.from(new Set(projects.map(project => project.category)))],
-        [projects]
-    );
-
-    // Filter projects by category
+    // Filter projects when category changes
     useEffect(() => {
         if (activeCategory === 'All') {
             setFilteredProjects(projects);
         } else {
             setFilteredProjects(projects.filter(project => project.category === activeCategory));
         }
-    }, [activeCategory, projects]);
-
-    // Handle category change
-    const handleCategoryChange = (category: string) => {
-        setActiveCategory(category);
-        // Reset visible projects count when changing categories
+        // Reset visible projects when category changes
         setVisibleProjects(3);
-    };
+    }, [activeCategory]);
 
-    // Get icon based on category
-    const getCategoryIcon = (category: string) => {
-        switch (category) {
-            case 'AI':
-                return <Code className="w-6 h-6 text-blue-500" />;
-            case 'Web':
-                return <PenTool className="w-6 h-6 text-indigo-500" />;
-            case 'Backend':
-                return <Server className="w-6 h-6 text-cyan-500" />;
-            case 'Data':
-                return <Database className="w-6 h-6 text-purple-500" />;
-            case 'Mobile':
-                return <ExternalLink className="w-6 h-6 text-amber-500" />;
-            default:
-                return <Code className="w-6 h-6 text-gray-500" />;
-        }
-    };
+    // Client-side rendering safety
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
-    // Show more projects
-    const showMoreProjects = () => {
+    const handleLoadMore = () => {
         setVisibleProjects(prev => Math.min(prev + 3, filteredProjects.length));
     };
 
     if (!isClient) {
-        return null; // Prevent SSR/Hydration issues
+        return null; // Prevent SSR/hydration issues
     }
 
     return (
         <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
             <div className="container mx-auto px-4">
-                <motion.div
-                    className="text-center mb-16"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                         {t('projects.title')}
                     </h2>
-                    <div className="w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mt-4 mb-8"></div>
+                    <div className="w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mb-6"></div>
                     <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                         {t('projects.description')}
                     </p>
-                </motion.div>
+                </div>
 
-                {/* Category filter */}
-                <ProjectFilter
+                {/* Category Filter */}
+                <PortfolioFilter
                     categories={categories}
                     activeCategory={activeCategory}
-                    onFilterChange={handleCategoryChange}
+                    onFilterChange={setActiveCategory}
                 />
 
-                {/* Projects grid */}
-                <motion.div
-                    variants={staggerContainer}
-                    initial="initial"
-                    animate="animate"
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
+                {/* Projects Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <AnimatePresence mode="wait">
                         {filteredProjects.slice(0, visibleProjects).map((project) => (
                             <motion.div
-                                key={project.title}
-                                variants={staggerItem}
-                                initial="initial"
-                                animate="animate"
-                                exit={{ opacity: 0, y: 20 }}
-                                layout
+                                key={project.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5 }}
+                                layout
                             >
-                                <ProjectCard>
-                                    <ProjectCard.Image
-                                        src={project.imageSrc || `https://via.placeholder.com/800x600/3b82f6/FFFFFF?text=${encodeURIComponent(project.title)}`}
-                                        alt={project.title}
-                                    />
-                                    <ProjectCard.Content>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <ProjectCard.Title>
-                                                {project.title}
-                                            </ProjectCard.Title>
-                                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900">
-                                                {getCategoryIcon(project.category)}
-                                            </div>
-                                        </div>
-                                        <ProjectCard.Description>
-                                            {project.description}
-                                        </ProjectCard.Description>
-                                        <ProjectCard.Tags>
-                                            {project.technologies.map((tech) => (
-                                                <ProjectCard.Tag key={tech}>
-                                                    {tech}
-                                                </ProjectCard.Tag>
-                                            ))}
-                                        </ProjectCard.Tags>
-                                        <ProjectCard.Links>
-                                            {project.githubLink && (
-                                                <ProjectCard.Link
-                                                    href={project.githubLink}
-                                                    icon={<Github className="w-4 h-4" />}
-                                                >
-                                                    Code
-                                                </ProjectCard.Link>
-                                            )}
-                                            {project.demoLink && (
-                                                <ProjectCard.Link
-                                                    href={project.demoLink}
-                                                    icon={<ExternalLink className="w-4 h-4" />}
-                                                >
-                                                    Demo
-                                                </ProjectCard.Link>
-                                            )}
-                                        </ProjectCard.Links>
-                                    </ProjectCard.Content>
-                                </ProjectCard>
+                                <PortfolioCard
+                                    title={project.title}
+                                    description={project.description}
+                                    imageUrl={project.imageUrl}
+                                    technologies={project.technologies}
+                                    githubUrl={project.githubUrl}
+                                    liveUrl={project.liveUrl}
+                                    category={project.category}
+                                />
                             </motion.div>
                         ))}
                     </AnimatePresence>
-                </motion.div>
+                </div>
 
-                {/* Load more button */}
+                {/* Load More Button */}
                 {visibleProjects < filteredProjects.length && (
                     <div className="text-center mt-12">
                         <motion.button
-                            onClick={showMoreProjects}
-                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+                            onClick={handleLoadMore}
+                            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >

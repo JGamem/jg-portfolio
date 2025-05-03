@@ -1,4 +1,5 @@
-// src/app/[locale]/page.tsx
+// src/app/page.tsx
+import React from 'react';
 import { Hero } from '@/app/components/sections/Hero';
 import { About } from '@/app/components/sections/About';
 import { Experience } from '@/app/components/sections/Experience';

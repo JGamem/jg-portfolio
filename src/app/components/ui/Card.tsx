@@ -1,9 +1,8 @@
-// src/app/components/ui/Card3D.tsx
+// src/app/components/ui/Card.tsx
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useMotionValue} from 'framer-motion';
-import { MousePosition, card3DEffect } from '@/app/lib/animation';
+import { motion, useMotionValue } from 'framer-motion';
 
 interface CardProps {
     children: React.ReactNode;
@@ -12,6 +11,8 @@ interface CardProps {
     glareEnabled?: boolean;
     animationEnabled?: boolean;
 }
+
+type MousePosition = { x: number; y: number };
 
 export const Card3D: React.FC<CardProps> = ({
     children,
@@ -87,6 +88,31 @@ export const Card3D: React.FC<CardProps> = ({
         }
     };
 
+    const card3DEffect = {
+        rest: {
+            rotateY: 0,
+            rotateX: 0,
+            transition: {
+                duration: 0.5,
+                ease: 'easeOut',
+            },
+        },
+        hover: (mousePos: MousePosition) => {
+            const { x, y } = mousePos;
+            const rotateX = -((y - 0.5) * 20);
+            const rotateY = (x - 0.5) * 20;
+            return {
+                rotateX,
+                rotateY,
+                z: 50,
+                transition: {
+                    duration: 0.3,
+                    ease: 'easeOut',
+                },
+            };
+        },
+    };
+
     return (
         <motion.div
             ref={cardRef}
@@ -100,7 +126,7 @@ export const Card3D: React.FC<CardProps> = ({
             custom={mousePosition}
             style={{
                 transformStyle: 'preserve-3d',
-                transformPerspective: 1000,
+                perspective: '1000px',
             }}
         >
             <div className="relative z-10">
