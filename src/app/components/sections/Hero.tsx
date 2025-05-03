@@ -1,16 +1,27 @@
+// src/app/components/sections/Hero.tsx (update existing file)
 'use client';
 
 import React from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
+import { ThreeJsBackground } from '@/app/components/ui/ThreeJsBackground';
+import { GradientButton } from '@/app/components/ui/GradientButton';
+import { ArrowDown, ExternalLink } from 'lucide-react';
 
 export const Hero: React.FC = () => {
     const { t } = useTranslation();
 
     return (
         <section id="home" className="relative h-screen flex items-center">
-            {/* Background with gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 dark:from-blue-900/30 dark:to-indigo-900/30"></div>
+            {/* Background */}
+            <ThreeJsBackground
+                particleCount={1500}
+                particleSize={1.5}
+                color="#3b82f6"
+            />
+
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 dark:from-blue-900/20 dark:to-indigo-900/20"></div>
 
             {/* Hero content */}
             <div className="container mx-auto px-4 z-10">
@@ -20,33 +31,70 @@ export const Hero: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-xl md:text-2xl font-medium text-blue-600 dark:text-blue-400 mb-2">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="inline-block px-4 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-4"
+                        >
                             {t('hero.greeting')}
-                        </h2>
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+                        </motion.div>
+
+                        <motion.h1
+                            className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                        >
                             {t('hero.name')}
-                        </h1>
-                        <h3 className="text-2xl md:text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-6">
-                            {t('hero.title')}
-                        </h3>
-                        <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+                        </motion.h1>
+
+                        <motion.h2
+                            className="text-2xl md:text-4xl font-semibold text-gray-700 dark:text-gray-300 mb-6"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                        >
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                                {t('hero.title')}
+                            </span>
+                        </motion.h2>
+
+                        <motion.p
+                            className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.5 }}
+                        >
                             {t('hero.description')}
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <a
-                                href="#projects"
-                                className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                        </motion.p>
+
+                        <motion.div
+                            className="flex flex-col sm:flex-row gap-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.6 }}
+                        >
+                            <GradientButton
+                                size="lg"
+                                icon={<ExternalLink className="w-5 h-5" />}
+                                onClick={() => {
+                                    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
                             >
                                 {t('hero.cta')}
-                            </a>
+                            </GradientButton>
 
-                            <a
-                                href="#contact"
-                                className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                            <GradientButton
+                                size="lg"
+                                variant="secondary"
+                                onClick={() => {
+                                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
                             >
                                 {t('hero.contact')}
-                            </a>
-                        </div>
+                            </GradientButton>
+                        </motion.div>
                     </motion.div>
                 </div>
             </div>
@@ -57,9 +105,15 @@ export const Hero: React.FC = () => {
                 animate={{ y: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
             >
-                <div className="w-8 h-12 rounded-full border-2 border-gray-400 dark:border-gray-600 flex justify-center">
-                    <div className="w-1 h-3 bg-gray-400 dark:bg-gray-600 rounded-full mt-2"></div>
-                </div>
+                <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    className="w-10 h-10 rounded-full border-2 border-blue-500 dark:border-blue-400 flex justify-center items-center cursor-pointer"
+                    onClick={() => {
+                        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                >
+                    <ArrowDown className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                </motion.div>
             </motion.div>
         </section>
     );

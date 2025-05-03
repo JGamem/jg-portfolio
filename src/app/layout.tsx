@@ -1,8 +1,11 @@
+// src/app/layout.tsx (update existing file)
 import React from 'react';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/app/providers/ThemeProvider';
 import { I18nProvider } from '@/app/providers/I18nProvider';
+import { FocusIndicator } from '@/app/components/ui/FocusIndicator';
+import { CustomCursor } from '@/app/components/ui/CustomCursor';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,9 +30,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#ffffff" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider>
           <I18nProvider>
+            <FocusIndicator />
+            <CustomCursor />
             {children}
           </I18nProvider>
         </ThemeProvider>

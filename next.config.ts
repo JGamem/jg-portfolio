@@ -1,9 +1,23 @@
+// next.config.js
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true'
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['via.placeholder.com'], // Add any image domains you'll use
+    domains: ['via.placeholder.com'],
   },
-}
+  poweredByHeader: false,
+  compress: true,
+  swcMinify: true,
+  experimental: {
+    optimizePackageImports: ['framer-motion', 'lucide-react', 'three'],
+    serverComponents: true,
+  }
+};
 
-module.exports = nextConfig
+export default withBundleAnalyzer(nextConfig);
