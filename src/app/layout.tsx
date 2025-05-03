@@ -12,7 +12,11 @@ import { Footer } from '@/app/components/layout/Footer';
 import { PerformanceOptimizer } from '@/app/components/ui/PerformanceOptimizer';
 import { ScrollToTop } from '@/app/components/ui/ScrollToTop';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const metadata = {
   title: 'Juan Martinez - FullStack Developer',
@@ -33,7 +37,8 @@ export default function RootLayout({
         <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="preconnect" href="https://via.placeholder.com" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.variable}>
+      {children}
         <ThemeProvider>
           <I18nProvider>
             <FocusIndicator />

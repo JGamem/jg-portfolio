@@ -1,4 +1,4 @@
-// next.config.mjs (renamed from next.config.ts)
+// next.config.mjs (rename from next.config.ts)
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -13,7 +13,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   compress: true,
-  swcMinify: true,
+  // Remove swcMinify as it's deprecated
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', 'three'],
   }
