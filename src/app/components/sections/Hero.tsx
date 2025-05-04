@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const roles = [
-        'Frontend Developer',
+        'Fullstack Developer',
         'UX/UI Designer',
         'Backend Expert',
         'ReactJS Specialist',
@@ -74,11 +74,7 @@ export const Hero: React.FC = () => {
 
     return (
         <section id="home" className="relative h-screen flex items-center">
-            <ThreeJsBackground
-                density={25} // Reduced density
-                colorPalette={['#3b82f6', '#60a5fa', '#93c5fd', '#2563eb', '#1d4ed8']}
-                interactiveStrength={0.2} // Reduced interactivity
-            />
+            <ThreeJsBackground/>
 
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 dark:from-blue-900/20 dark:to-indigo-900/20"></div>

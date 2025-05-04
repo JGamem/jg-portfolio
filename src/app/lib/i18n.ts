@@ -8,7 +8,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const enTranslations = {
     hero: {
         greeting: 'Hello, I am',
-        name: 'Juan Martinez',
+        name: 'Juan G.',
         title: 'Fullstack Developer',
         description: 'I build innovative and scalable web applications with modern technologies.',
         cta: 'View My Work',
@@ -169,8 +169,8 @@ const enTranslations = {
 // Spanish translations
 const esTranslations = {
     hero: {
-        greeting: 'Hola, soy',
-        name: 'Juan Martinez',
+        greeting: 'Hola, yo soy',
+        name: 'Juan G.',
         title: 'Desarrollador Fullstack',
         description: 'Construyo aplicaciones web innovadoras y escalables con tecnologías modernas.',
         cta: 'Ver Mi Trabajo',
@@ -202,7 +202,7 @@ const esTranslations = {
         ],
     },
     skills: {
-        title: 'Habilidades Técnicas',
+        title: 'Habilidades',
         hardSkills: 'Habilidades Técnicas',
         softSkills: 'Habilidades Blandas',
         languages: 'Idiomas',
@@ -239,9 +239,13 @@ const esTranslations = {
                 level: 'Básico (A2)',
             },
             {
+                name: 'Italiano',
+                level: 'A1',
+            },
+            {
                 name: 'Español',
                 level: 'Nativo',
-            },
+            }
         ],
     },
     education: {

@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
                     <div className="col-span-1 md:col-span-2">
                         <Link href="/">
                             <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                                Juan Martinez
+                                Juan G.
                             </span>
                         </Link>
                         <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-md">
@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
 
                 <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
                     <p className="text-gray-600 dark:text-gray-400">
-                        &copy; {currentYear} Juan Martinez. {t('footer.rights')}
+                        &copy; {currentYear} Juan G. {t('footer.rights')}
                     </p>
                 </div>
             </div>

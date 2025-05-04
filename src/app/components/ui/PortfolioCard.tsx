@@ -3,14 +3,14 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { ExternalLink, Github } from 'lucide-react';
 import { Card3D } from './Card';
+import { ColorPlaceholder } from './ColorPlaceholder';
 
 interface PortfolioCardProps {
     title: string;
     description: string;
-    imageUrl: string;
+    backgroundColor: string; // Changed from imageUrl
     technologies: string[];
     githubUrl?: string;
     liveUrl?: string;
@@ -20,7 +20,7 @@ interface PortfolioCardProps {
 export const PortfolioCard: React.FC<PortfolioCardProps> = ({
     title,
     description,
-    imageUrl,
+    backgroundColor,
     technologies,
     githubUrl,
     liveUrl,
@@ -45,12 +45,12 @@ export const PortfolioCard: React.FC<PortfolioCardProps> = ({
                             scale: isHovered ? 1.05 : 1,
                         }}
                         transition={{ duration: 0.3 }}
+                        className="h-full w-full"
                     >
-                        <Image
-                            src={imageUrl}
-                            alt={title}
-                            fill
-                            className="object-cover"
+                        <ColorPlaceholder
+                            color={backgroundColor}
+                            text={title}
+                            className="h-full w-full"
                         />
                     </motion.div>
 

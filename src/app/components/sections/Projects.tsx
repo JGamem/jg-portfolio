@@ -11,7 +11,7 @@ interface Project {
     id: string;
     title: string;
     description: string;
-    imageUrl: string;
+    backgroundColor: string; // Changed from imageUrl to backgroundColor
     technologies: string[];
     category: string;
     githubUrl?: string;
@@ -23,7 +23,7 @@ const projects: Project[] = [
         id: '1',
         title: 'AI-Powered Data Processing',
         description: 'Serverless application using AWS Lambda and Amazon Bedrock to process and analyze large datasets with LLM integration.',
-        imageUrl: 'https://via.placeholder.com/800x600/3b82f6/FFFFFF?text=AI+Data+Processing',
+        backgroundColor: '#3b82f6', // Blue
         technologies: ['AWS', 'Python', 'React', 'TypeScript'],
         category: 'AI',
         githubUrl: 'https://github.com',
@@ -33,7 +33,7 @@ const projects: Project[] = [
         id: '2',
         title: 'Enterprise Web Application',
         description: 'Scalable web application with complex business logic and multiple integrations with third-party services.',
-        imageUrl: 'https://via.placeholder.com/800x600/4f46e5/FFFFFF?text=Enterprise+Web+App',
+        backgroundColor: '#4f46e5', // Indigo
         technologies: ['Node.js', 'React', 'MongoDB', 'AWS'],
         category: 'Web',
         githubUrl: 'https://github.com',
@@ -42,7 +42,7 @@ const projects: Project[] = [
         id: '3',
         title: 'RESTful API Development',
         description: 'High-performance RESTful API for data management with comprehensive documentation and security features.',
-        imageUrl: 'https://via.placeholder.com/800x600/0891b2/FFFFFF?text=RESTful+API',
+        backgroundColor: '#0891b2', // Cyan
         technologies: ['Node.js', 'Express', 'SQL', 'Docker'],
         category: 'Backend',
         liveUrl: 'https://example.com',
@@ -51,7 +51,7 @@ const projects: Project[] = [
         id: '4',
         title: 'Data Visualization Dashboard',
         description: 'Interactive dashboard for visualizing complex datasets with real-time updates and filtering capabilities.',
-        imageUrl: 'https://via.placeholder.com/800x600/8b5cf6/FFFFFF?text=Data+Dashboard',
+        backgroundColor: '#8b5cf6', // Purple
         technologies: ['React', 'D3.js', 'TypeScript', 'Tailwind CSS'],
         category: 'Data',
         githubUrl: 'https://github.com',
@@ -61,7 +61,7 @@ const projects: Project[] = [
         id: '5',
         title: 'E-commerce Platform',
         description: 'Full-featured e-commerce platform with product management, cart functionality, and payment processing.',
-        imageUrl: 'https://via.placeholder.com/800x600/ec4899/FFFFFF?text=E-commerce',
+        backgroundColor: '#ec4899', // Pink
         technologies: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind CSS'],
         category: 'Web',
         githubUrl: 'https://github.com',
@@ -70,7 +70,7 @@ const projects: Project[] = [
         id: '6',
         title: 'Mobile Fitness Application',
         description: 'Cross-platform mobile app for tracking workouts, nutrition, and health metrics with social features.',
-        imageUrl: 'https://via.placeholder.com/800x600/f59e0b/FFFFFF?text=Fitness+App',
+        backgroundColor: '#f59e0b', // Amber
         technologies: ['React Native', 'Firebase', 'Redux', 'GraphQL'],
         category: 'Mobile',
     },
@@ -145,7 +145,7 @@ export const Projects: React.FC = () => {
                                 <PortfolioCard
                                     title={project.title}
                                     description={project.description}
-                                    imageUrl={project.imageUrl}
+                                    backgroundColor={project.backgroundColor}
                                     technologies={project.technologies}
                                     githubUrl={project.githubUrl}
                                     liveUrl={project.liveUrl}

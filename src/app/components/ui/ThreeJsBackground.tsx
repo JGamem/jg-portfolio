@@ -1,159 +1,147 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { useThemeStore } from '@/app/store/theme';
 import * as THREE from 'three';
 
 interface ThreeJsBackgroundProps {
-    density?: number;
-    noiseIntensity?: number;
-    colorPalette?: string[];
-    interactiveStrength?: number;
+    color?: string;
+    particleCount?: number;
+    particleSize?: number;
+    particleSpeed?: number;
 }
 
 export const ThreeJsBackground: React.FC<ThreeJsBackgroundProps> = ({
-    density = 25, // Reduced from 60
-    colorPalette = ['#3b82f6', '#60a5fa', '#93c5fd', '#2563eb', '#1d4ed8'],
-    interactiveStrength = 0.2, // Reduced from 0.3
+    color = '#3b82f6',
+    particleCount = 1000,
+    particleSize = 2,
+    particleSpeed = 0.001,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const mousePosition = useRef({ x: 0, y: 0 });
-    const { theme } = useThemeStore();
-
-    // Get preferred colors based on theme with reduced opacity
-    const getThemeColors = () => {
-        if (theme === 'dark') {
-            return ['#1e40af', '#3b82f6', '#60a5fa', '#1d4ed8', '#2563eb'];
-        } else if (theme === 'high-contrast') {
-            return ['#000080', '#0000ff', '#4040ff', '#6060ff', '#0000b3'];
-        }
-        return colorPalette;
-    };
 
     useEffect(() => {
         if (!containerRef.current) return;
 
-        // Scene setup
+        // Setup
         const scene = new THREE.Scene();
 
-        // Camera setup with dynamic FOV based on screen size
-        const fov = window.innerWidth > 768 ? 75 : 60;
         const camera = new THREE.PerspectiveCamera(
-            fov,
+            75,
             window.innerWidth / window.innerHeight,
             0.1,
             1000
         );
         camera.position.z = 350;
 
-        // Renderer with anti-aliasing and higher pixel ratio
         const renderer = new THREE.WebGLRenderer({
             alpha: true,
             antialias: true,
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit pixel ratio for performance
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         containerRef.current.appendChild(renderer.domElement);
 
-        // Create a simpler particle system for better performance
-        const particleCount = density * 30; // Reduced multiplication factor
+        // Create a canvas for the particle texture
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        
+        if (ctx) {
+            // Draw a circular gradient on the canvas
+            const gradient = ctx.createRadialGradient(
+                32, 32, 0, 
+                32, 32, 32
+            );
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(32, 32, 32, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Create a texture from the canvas
+        const texture = new THREE.CanvasTexture(canvas);
+
+        // Particles
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesPositions = new Float32Array(particleCount * 3);
-        const particlesSizes = new Float32Array(particleCount);
-        const particlesColors = new Float32Array(particleCount * 3);
+        const particlesCount = particleCount;
+        const posArray = new Float32Array(particlesCount * 3);
 
-        // Generate particles with varied sizes/colors
-        const colors = getThemeColors().map(color => new THREE.Color(color));
-
-        for (let i = 0; i < particleCount; i++) {
-            const i3 = i * 3;
-
-            // Position particles in a sphere with more space
-            const theta = Math.random() * Math.PI * 2;
-            const radius = 20 + Math.random() * 300; // More spread out
-
-            particlesPositions[i3] = Math.cos(theta) * radius;
-            particlesPositions[i3 + 1] = Math.sin(theta) * radius * 0.6;
-            particlesPositions[i3 + 2] = (Math.random() - 0.5) * 120;
-
-            // Smaller, less intrusive particles
-            particlesSizes[i] = 0.5 + Math.random();
-
-            // Varied colors with more transparency
-            const colorIndex = Math.floor(Math.random() * colors.length);
-            const color = colors[colorIndex];
-            particlesColors[i3] = color.r;
-            particlesColors[i3 + 1] = color.g;
-            particlesColors[i3 + 2] = color.b;
+        // Position particles randomly in 3D space
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 1000;
         }
 
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPositions, 3));
-        particlesGeometry.setAttribute('size', new THREE.BufferAttribute(particlesSizes, 1));
-        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(particlesColors, 3));
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
-        // Create material with more transparency
+        // Material with the circular texture
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 2.5,
-            sizeAttenuation: true,
-            vertexColors: true,
+            size: particleSize,
             transparent: true,
-            opacity: 0.6, // More transparent
-            alphaTest: 0.3
+            color: color,
+            blending: THREE.AdditiveBlending,
+            sizeAttenuation: true,
+            map: texture,
+            alphaTest: 0.01, // To avoid rendering pixels with low alpha values
         });
 
+        // Mesh
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
 
-        // Handle mouse interaction
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+
         const handleMouseMove = (event: MouseEvent) => {
-            mousePosition.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mousePosition.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.1;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.1;
         };
 
-        // Handle resize for responsive design
+        window.addEventListener('mousemove', handleMouseMove);
+
+        // Animation loop
+        const animate = () => {
+            requestAnimationFrame(animate);
+
+            // Rotate particles slowly
+            particlesMesh.rotation.x += particleSpeed;
+            particlesMesh.rotation.y += particleSpeed * 0.8;
+
+            // Follow mouse with some delay
+            particlesMesh.position.x += (mouseX - particlesMesh.position.x) * 0.05;
+            particlesMesh.position.y += (-mouseY - particlesMesh.position.y) * 0.05;
+
+            renderer.render(scene, camera);
+        };
+
+        animate();
+
+        // Handle resize
         const handleResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('resize', handleResize);
 
-        // Animation loop with reduced animation speed
-        const clock = new THREE.Clock();
-
-        const animate = () => {
-            const elapsedTime = clock.getElapsedTime();
-
-            // Gentler rotation
-            particlesMesh.rotation.z = elapsedTime * 0.01; // Slower rotation
-            particlesMesh.rotation.x = Math.sin(elapsedTime * 0.02) * 0.01;
-
-            // Render
-            renderer.render(scene, camera);
-
-            requestAnimationFrame(animate);
-        };
-
-        animate();
-
-        // Clean up
+        // Cleanup
         return () => {
-            if (containerRef.current && containerRef.current.contains(renderer.domElement)) {
+            if (containerRef.current) {
                 containerRef.current.removeChild(renderer.domElement);
             }
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('resize', handleResize);
-
-            // Dispose resources
-            particlesGeometry.dispose();
             particlesMaterial.dispose();
-            scene.clear();
+            particlesGeometry.dispose();
+            texture.dispose();
         };
-    }, [colorPalette, density, interactiveStrength, theme]);
+    }, [color, particleCount, particleSize, particleSpeed]);
 
     return (
-        <div ref={containerRef} className="fixed inset-0 -z-10" aria-hidden="true" />
+        <div ref={containerRef} className="fixed inset-0 -z-10" />
     );
 };

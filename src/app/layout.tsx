@@ -19,8 +19,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'Juan Martinez - FullStack Developer',
-  description: 'Professional portfolio of Juan Martinez, a FullStack Developer with experience specializing in web development with modern technologies.',
+  title: 'Juan Gamez - FullStack Developer',
+  description: 'Professional portfolio of Juan G., a FullStack Developer with experience specializing in web development with modern technologies.',
   keywords: 'fullstack developer, web development, React, TypeScript, Node.js, AWS, UX/UI design',
 };
 
@@ -52,7 +52,7 @@ export default function RootLayout({
               messages={[
                 {
                   id: 'welcome',
-                  content: 'Welcome to Juan Martinez\'s portfolio website.',
+                  content: 'Welcome to Juan G.\'s portfolio website.',
                   type: 'status',
                   clearAfter: 3000,
                 }
