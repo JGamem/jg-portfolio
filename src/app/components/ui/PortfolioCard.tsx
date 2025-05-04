@@ -3,7 +3,6 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { ExternalLink, Github } from 'lucide-react';
 import { Card3D } from './Card';
 
@@ -27,6 +26,20 @@ export const PortfolioCard: React.FC<PortfolioCardProps> = ({
     category,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [imageError, setImageError] = useState(false);
+
+    // Generate color based on category
+    const getCategoryColor = (cat: string) => {
+        const colors: Record<string, string> = {
+            'AI': 'bg-blue-600',
+            'Web': 'bg-indigo-600',
+            'Backend': 'bg-green-600',
+            'Data': 'bg-purple-600',
+            'Mobile': 'bg-orange-600'
+        };
+
+        return colors[cat] || 'bg-gray-600';
+    };
 
     return (
         <Card3D
@@ -38,20 +51,29 @@ export const PortfolioCard: React.FC<PortfolioCardProps> = ({
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                {/* Image */}
+                {/* Image or Fallback */}
                 <div className="relative h-48 overflow-hidden">
                     <motion.div
                         animate={{
                             scale: isHovered ? 1.05 : 1,
                         }}
                         transition={{ duration: 0.3 }}
+                        className="h-full w-full"
                     >
-                        <Image
-                            src={imageUrl}
-                            alt={title}
-                            fill
-                            className="object-cover"
-                        />
+                        {imageError ? (
+                            // Fallback colored background with title
+                            <div className={`${getCategoryColor(category)} h-full w-full flex items-center justify-center text-white p-4 text-center`}>
+                                <span className="font-bold text-lg">{title}</span>
+                            </div>
+                        ) : (
+                            // Try to load the image
+                            <img
+                                src={imageUrl}
+                                alt={title}
+                                className="h-full w-full object-cover"
+                                onError={() => setImageError(true)}
+                            />
+                        )}
                     </motion.div>
 
                     {/* Category tag */}

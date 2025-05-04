@@ -20,7 +20,7 @@ const inter = Inter({
 
 export const metadata = {
   title: 'Juan Martinez - FullStack Developer',
-  description: 'Professional portfolio of Juan Martinez, a FullStack Developer with 20+ years of experience specializing in web development with modern technologies.',
+  description: 'Professional portfolio of Juan Martinez, a FullStack Developer with experience specializing in web development with modern technologies.',
   keywords: 'fullstack developer, web development, React, TypeScript, Node.js, AWS, UX/UI design',
 };
 
@@ -34,11 +34,11 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossOrigin="" />
+        {/* Remove this line that's causing the 404 error */}
+        {/* <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossOrigin="" /> */}
         <link rel="preconnect" href="https://via.placeholder.com" />
       </head>
       <body className={inter.variable}>
-      {children}
         <ThemeProvider>
           <I18nProvider>
             <FocusIndicator />

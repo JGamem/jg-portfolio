@@ -16,8 +16,23 @@ export const CustomCursor: React.FC = () => {
 
     const [cursorVariant, setCursorVariant] = useState<CursorVariant>('default');
     const [isVisible, setIsVisible] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     useEffect(() => {
+        // Check if it's a touch device
+        const detectTouchDevice = () => {
+            setIsTouchDevice(
+                ('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                ((navigator as any).msMaxTouchPoints > 0)
+            );
+        };
+
+        detectTouchDevice();
+
+        // If it's a touch device, don't show the custom cursor
+        if (isTouchDevice) return;
+
         // Make cursor visible after a short delay for a smooth entrance
         const timer = setTimeout(() => setIsVisible(true), 300);
 
@@ -70,23 +85,33 @@ export const CustomCursor: React.FC = () => {
             document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
             document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
         };
-    }, [mouseX, mouseY]);
+    }, [mouseX, mouseY, isTouchDevice]);
+
+    // Don't render custom cursor on touch devices
+    if (isTouchDevice) return null;
 
     return (
         <>
             <style jsx global>{`
-        /* Hide default cursor on everything when custom cursor is active */
-        html, body, * {
-        cursor: none !important;
-        }
-        
-        /* Show default cursor for touch devices */
-        @media (pointer: coarse) {
-          html, body, * {
-            cursor: auto !important;
-        }
-        }
-    `}</style>
+                /* Hide default cursor only when custom cursor is active and visible */
+                ${isVisible ? `
+                    html, body, a, button {
+                        cursor: none !important;
+                    }
+                    
+                    /* Excluding form elements to keep their native cursors */
+                    input, textarea, select {
+                        cursor: auto !important;
+                    }
+                ` : ''}
+                
+                /* Show default cursor for touch devices */
+                @media (pointer: coarse) {
+                    html, body, * {
+                        cursor: auto !important;
+                    }
+                }
+            `}</style>
 
             <motion.div
                 ref={cursorRef}

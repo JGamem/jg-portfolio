@@ -1,9 +1,9 @@
-// src/app/components/ui/ThreeJsBackground.tsx
 'use client';
 
 import React, { useRef, useEffect } from 'react';
 import { useThemeStore } from '@/app/store/theme';
 import * as THREE from 'three';
+
 interface ThreeJsBackgroundProps {
     density?: number;
     noiseIntensity?: number;
@@ -12,15 +12,15 @@ interface ThreeJsBackgroundProps {
 }
 
 export const ThreeJsBackground: React.FC<ThreeJsBackgroundProps> = ({
-    density = 60,
+    density = 25, // Reduced from 60
     colorPalette = ['#3b82f6', '#60a5fa', '#93c5fd', '#2563eb', '#1d4ed8'],
-    interactiveStrength = 0.3,
+    interactiveStrength = 0.2, // Reduced from 0.3
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const mousePosition = useRef({ x: 0, y: 0 });
     const { theme } = useThemeStore();
 
-    // Get preferred colors based on theme
+    // Get preferred colors based on theme with reduced opacity
     const getThemeColors = () => {
         if (theme === 'dark') {
             return ['#1e40af', '#3b82f6', '#60a5fa', '#1d4ed8', '#2563eb'];
@@ -52,11 +52,11 @@ export const ThreeJsBackground: React.FC<ThreeJsBackgroundProps> = ({
             antialias: true,
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit pixel ratio for performance
         containerRef.current.appendChild(renderer.domElement);
 
-        // Create a more complex particle system
-        const particleCount = density * 50;
+        // Create a simpler particle system for better performance
+        const particleCount = density * 30; // Reduced multiplication factor
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesPositions = new Float32Array(particleCount * 3);
         const particlesSizes = new Float32Array(particleCount);
@@ -68,19 +68,18 @@ export const ThreeJsBackground: React.FC<ThreeJsBackgroundProps> = ({
         for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
 
-            // Position particles in a sphere
+            // Position particles in a sphere with more space
             const theta = Math.random() * Math.PI * 2;
-            const radius = 5 + Math.random() * 400;
+            const radius = 20 + Math.random() * 300; // More spread out
 
-            // Apply some randomness to distribution
             particlesPositions[i3] = Math.cos(theta) * radius;
-            particlesPositions[i3 + 1] = Math.sin(theta) * radius * 0.7;
-            particlesPositions[i3 + 2] = (Math.random() - 0.5) * 150;
+            particlesPositions[i3 + 1] = Math.sin(theta) * radius * 0.6;
+            particlesPositions[i3 + 2] = (Math.random() - 0.5) * 120;
 
-            // Varied sizes
-            particlesSizes[i] = 0.5 + Math.random() * 1.5;
+            // Smaller, less intrusive particles
+            particlesSizes[i] = 0.5 + Math.random();
 
-            // Varied colors
+            // Varied colors with more transparency
             const colorIndex = Math.floor(Math.random() * colors.length);
             const color = colors[colorIndex];
             particlesColors[i3] = color.r;
@@ -92,13 +91,14 @@ export const ThreeJsBackground: React.FC<ThreeJsBackgroundProps> = ({
         particlesGeometry.setAttribute('size', new THREE.BufferAttribute(particlesSizes, 1));
         particlesGeometry.setAttribute('color', new THREE.BufferAttribute(particlesColors, 3));
 
-        // Create basic material for points
+        // Create material with more transparency
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 3,
+            size: 2.5,
             sizeAttenuation: true,
             vertexColors: true,
             transparent: true,
-            alphaTest: 0.5
+            opacity: 0.6, // More transparent
+            alphaTest: 0.3
         });
 
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -120,15 +120,15 @@ export const ThreeJsBackground: React.FC<ThreeJsBackgroundProps> = ({
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('resize', handleResize);
 
-        // Animation loop
+        // Animation loop with reduced animation speed
         const clock = new THREE.Clock();
 
         const animate = () => {
             const elapsedTime = clock.getElapsedTime();
 
-            // Simple rotation
-            particlesMesh.rotation.z = elapsedTime * 0.02;
-            particlesMesh.rotation.x = Math.sin(elapsedTime * 0.03) * 0.02;
+            // Gentler rotation
+            particlesMesh.rotation.z = elapsedTime * 0.01; // Slower rotation
+            particlesMesh.rotation.x = Math.sin(elapsedTime * 0.02) * 0.01;
 
             // Render
             renderer.render(scene, camera);

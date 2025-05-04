@@ -1,4 +1,3 @@
-// src/app/components/sections/EnhancedHero.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -7,7 +6,6 @@ import { motion, useAnimation } from 'framer-motion';
 import { ThreeJsBackground } from '@/app/components/ui/ThreeJsBackground';
 import { GradientButton } from '@/app/components/ui/GradientButton';
 import { ArrowDown, ExternalLink } from 'lucide-react';
-
 
 export const Hero: React.FC = () => {
     const { t } = useTranslation();
@@ -77,10 +75,9 @@ export const Hero: React.FC = () => {
     return (
         <section id="home" className="relative h-screen flex items-center">
             <ThreeJsBackground
-                density={70}
-                noiseIntensity={0.6}
+                density={25} // Reduced density
                 colorPalette={['#3b82f6', '#60a5fa', '#93c5fd', '#2563eb', '#1d4ed8']}
-                interactiveStrength={0.4}
+                interactiveStrength={0.2} // Reduced interactivity
             />
 
             {/* Gradient overlay */}
@@ -200,6 +197,6 @@ export const Hero: React.FC = () => {
                     <ArrowDown className="w-5 h-5 text-blue-500 dark:text-blue-400" />
                 </motion.div>
             </motion.div>
-        </section >
+        </section>
     );
 };

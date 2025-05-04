@@ -174,4 +174,5 @@ export const Projects: React.FC = () => {
     );
 };
 
+// Export as both default and named export to fix import issues
 export default Projects;
