@@ -1,16 +1,16 @@
-// src/app/components/sections/EnhancedExperience.tsx
+// src/app/components/sections/Experience.tsx
 'use client';
 
 import React from 'react';
 import { useTranslation } from '@/app/lib/i18n';
 import { motion } from 'framer-motion';
-import { Timeline, TimelineItem } from '@/app/components/ui/Timeline';
+import { Timeline } from '@/app/components/ui/Timeline';
 
-export const Experience: React.FC = () => {
+export const Experience = () => {
     const { t } = useTranslation();
 
     // Enhanced role data with additional details
-    const roles: TimelineItem[] = [
+    const roles = [
         {
             id: 'genpact',
             title: 'Fullstack Developer Mid',
@@ -77,7 +77,7 @@ export const Experience: React.FC = () => {
                 'Reduced load times by implementing lazy loading and code splitting',
                 'Created a reusable component library that accelerated development'
             ],
-            technologies: ['React', 'JavaScript', 'CSS/SASS', 'WordPress', 'HTML5', 'Figma'],
+            technologies: ['React', 'JavaScript', 'CSS/SASS', 'WordPress', 'HTML5', 'Figma']
         }
     ];
 
@@ -100,7 +100,7 @@ export const Experience: React.FC = () => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         viewport={{ once: true }}
                         className="w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mt-4 mb-8"
-                    ></motion.div>
+                    />
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -108,7 +108,7 @@ export const Experience: React.FC = () => {
                         viewport={{ once: true }}
                         className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
                     >
-                        With over 20 years of experience in software development and design, Ive worked across diverse industries solving complex problems with elegant solutions.
+                        With over 4 years of experience in software development, I&apos;ve worked across diverse industries solving complex problems with elegant solutions.
                     </motion.p>
                 </div>
 
